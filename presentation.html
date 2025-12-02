@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Legal Document Classification - Deep Learning Project</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/reveal.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/theme/night.min.css"
+    />
+    <style>
+      .reveal {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      }
+      .reveal h1 {
+        color: #667eea;
+        text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.7);
+        font-size: 2.2em;
+        margin-bottom: 0.4em;
+        font-weight: 700;
+      }
+      .reveal h2 {
+        color: #f093fb;
+        font-size: 1.6em;
+        margin-bottom: 0.6em;
+        font-weight: 600;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+      }
+      .reveal h3 {
+        color: #fff;
+        font-size: 1.2em;
+        margin-bottom: 0.4em;
+        font-weight: 500;
+      }
+      .reveal p,
+      .reveal li {
+        font-size: 0.8em;
+        line-height: 1.5;
+      }
+      .card {
+        background: rgba(102, 126, 234, 0.15);
+        padding: 20px;
+        border-radius: 12px;
+        border: 2px solid rgba(102, 126, 234, 0.4);
+        margin: 15px 0;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+      }
+      .gradient-bg {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        padding: 25px;
+        border-radius: 15px;
+        color: white;
+        box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+      }
+      .stat-box {
+        background: linear-gradient(
+          135deg,
+          rgba(102, 126, 234, 0.3),
+          rgba(118, 75, 162, 0.3)
+        );
+        padding: 20px;
+        margin: 10px;
+        border-radius: 12px;
+        border: 2px solid #667eea;
+        display: inline-block;
+        min-width: 180px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+      }
+      .stat-number {
+        font-size: 2.5em;
+        font-weight: 700;
+        color: #f093fb;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+      }
+      .pipeline-box {
+        font-size: 0.7em !important;
+        padding: 10px 14px !important;
+        margin: 6px 0 !important;
+
+        background: rgba(102, 126, 234, 0.15);
+        border-radius: 12px;
+        border: 2px solid rgba(102, 126, 234, 0.4);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.25);
+      }
+
+      .arrow {
+        font-size: 0.9em !important;
+        line-height: 0.9em !important;
+        margin: 2px 0 !important;
+        text-align: center;
+        opacity: 0.7;
+      }
+
+      section {
+        padding-top: 0 !important;
+      }
+
+      .insights-grid,
+      .pipeline-box-container {
+        margin: 0 !important;
+        padding: 0 !important;
+      }
+
+      .result-card {
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        padding: 20px;
+        margin: 12px;
+        border-radius: 12px;
+        color: white;
+        display: inline-block;
+        min-width: 200px;
+        box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
+      }
+      .comparison-table {
+        font-size: 0.7em;
+        margin: 20px auto;
+        border-collapse: collapse;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+      }
+      .comparison-table th {
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        padding: 12px;
+        font-weight: 600;
+      }
+      .comparison-table td {
+        padding: 10px;
+        border: 1px solid rgba(102, 126, 234, 0.3);
+        background: rgba(255, 255, 255, 0.05);
+      }
+      .team-member {
+        display: inline-block;
+        margin: 10px;
+        padding: 15px 20px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 12px;
+        min-width: 180px;
+        font-size: 0.9em;
+        border: 2px solid rgba(102, 126, 234, 0.5);
+      }
+      .highlight {
+        color: #f093fb;
+        font-weight: 700;
+        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+      }
+      .emoji {
+        font-size: 1.4em;
+      }
+      .insights-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 15px;
+        margin: 20px 0;
+      }
+      .insight-card {
+        background: rgba(102, 126, 234, 0.15);
+        padding: 15px;
+        border-radius: 10px;
+        border: 2px solid rgba(102, 126, 234, 0.4);
+        text-align: left;
+        font-size: 0.75em;
+      }
+      ul {
+        list-style: none;
+        padding-left: 0;
+      }
+      ul li:before {
+        content: "▸ ";
+        color: #f093fb;
+        font-weight: bold;
+        margin-right: 8px;
+      }
+      .reveal .slides {
+        width: 100% !important;
+        height: 100% !important;
+      }
+      .reveal .slides > section {
+        padding: 25px;
+      }
+      .reveal .slides section .fragment {
+        opacity: 0.3;
+      }
+      .reveal .slides section .fragment.visible {
+        opacity: 1;
+      }
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      @keyframes zoomIn {
+        from {
+          opacity: 0;
+          transform: scale(0.8);
+        }
+        to {
+          opacity: 1;
+          transform: scale(1);
+        }
+      }
+      @keyframes slideInLeft {
+        from {
+          opacity: 0;
+          transform: translateX(-50px);
+        }
+        to {
+          opacity: 1;
+          transform: translateX(0);
+        }
+      }
+      @keyframes slideInRight {
+        from {
+          opacity: 0;
+          transform: translateX(50px);
+        }
+        to {
+          opacity: 1;
+          transform: translateX(0);
+        }
+      }
+      .animate-in {
+        animation: fadeInUp 0.6s ease-out;
+      }
+      .zoom-in {
+        animation: zoomIn 0.5s ease-out;
+      }
+      .slide-left {
+        animation: slideInLeft 0.6s ease-out;
+      }
+      .slide-right {
+        animation: slideInRight 0.6s ease-out;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="reveal">
+      <div class="slides">
+        <!-- Slide 1: Title -->
+        <section
+          data-background-gradient="linear-gradient(135deg, #667eea 0%, #764ba2 100%)"
+        >
+          <h1 class="zoom-in">⚖️ Legal Document Classification</h1>
+          <h3 class="animate-in" style="color: #fff">
+            AI-Powered Categorization Legal Court Opinions
+          </h3>
+          <br />
+          <div style="font-size: 0.9em" class="animate-in">
+            <p style="font-size: 1.1em"><strong>Team Members:</strong></p>
+            <div class="team-member">
+              Kirtan Shah<br /><small>22000428</small>
+            </div>
+            <div class="team-member">
+              Naisargi Modi<br /><small>22000397</small>
+            </div>
+            <div class="team-member">
+              Mansha Sanger<br /><small>22000396</small>
+            </div>
+            <div class="team-member">
+              Archi Prajapati<br /><small>22000378</small>
+            </div>
+          </div>
+        </section>
+
+        <!-- Slide 2: Problem -->
+        <section>
+          <h2>🎯 The Problem</h2>
+          <div class="gradient-bg animate-in">
+            <h3>Legal Document Management Crisis</h3>
+            <div style="text-align: left; font-size: 0.95em; margin-top: 15px">
+              <p class="fragment">
+                <span class="emoji">⏰</span> Lawyers spend
+                <span class="highlight">30-40%</span> of time organizing
+                documents
+              </p>
+              <p class="fragment">
+                <span class="emoji">💰</span> Manual classification costs
+                <span class="highlight">$25-80</span> per document
+              </p>
+              <p class="fragment">
+                <span class="emoji">📚</span> Law firms handle
+                <span class="highlight">1000+</span> documents daily
+              </p>
+              <p class="fragment">
+                <span class="emoji">❌</span> Human error rate:
+                <span class="highlight">5-8%</span> in categorization
+              </p>
+            </div>
+          </div>
+          <br />
+          <h3 class="fragment" style="color: #f093fb; font-size: 1.3em">
+            Can AI automate this? <span style="color: #fff">YES! ✨</span>
+          </h3>
+        </section>
+
+        <!-- Slide 3: Pipeline -->
+        <section>
+          <h2>💡 Our Complete Development Pipeline</h2>
+          <div style="font-size: 0.75em" class="pipeline-box-container">
+            <div class="pipeline-box fragment slide-left">
+              <strong>📚 Data Collection:</strong> Load SCOTUS (8K docs) from
+              HuggingFace
+            </div>
+            <div class="arrow fragment">↓</div>
+
+            <div class="pipeline-box fragment slide-right">
+              <strong>🔧 Preprocessing:</strong> Tokenization, truncation (512
+              tokens), label encoding
+            </div>
+            <div class="arrow fragment">↓</div>
+
+            <div class="pipeline-box fragment slide-left">
+              <strong>📊 Baseline Model:</strong> TF-IDF (15K features) +
+              Logistic Regression
+            </div>
+            <div class="arrow fragment">↓</div>
+
+            <div class="pipeline-box fragment slide-right">
+              <strong>🧠 Advanced Model:</strong> Fine-tune Legal-BERT (110M
+              params, 5 epochs)
+            </div>
+            <div class="arrow fragment">↓</div>
+
+            <div class="pipeline-box fragment slide-left">
+              <strong>📈 Evaluation:</strong> Test on 1.4K documents, compare
+              metrics
+            </div>
+            <div class="arrow fragment">↓</div>
+
+            <div class="pipeline-box fragment slide-right">
+              <strong>🚀 Deployment:</strong> Build Streamlit web app with
+              interactive UI
+            </div>
+          </div>
+        </section>
+
+        <!-- Slide 4: Dataset -->
+        <section>
+          <h2>📚 Dataset: SCOTUS from LexGLUE</h2>
+          <div class="insights-grid">
+            <div class="card">
+              <h3 style="color: #f093fb">📊 Statistics</h3>
+              <table style="width: 100%; font-size: 0.85em">
+                <tr>
+                  <td><strong>Total:</strong></td>
+                  <td>~8,000 docs</td>
+                </tr>
+                <tr>
+                  <td><strong>Train:</strong></td>
+                  <td>~5,000</td>
+                </tr>
+                <tr>
+                  <td><strong>Validation:</strong></td>
+                  <td>~1,400</td>
+                </tr>
+                <tr>
+                  <td><strong>Test:</strong></td>
+                  <td>~1,400</td>
+                </tr>
+                <tr>
+                  <td><strong>Categories:</strong></td>
+                  <td>14</td>
+                </tr>
+              </table>
+            </div>
+            <div class="card">
+              <h3 style="color: #f093fb">✅ Why SCOTUS?</h3>
+              <ul style="font-size: 0.85em">
+                <li>Real ground-truth labels</li>
+                <li>Expert-annotated</li>
+                <li>Publicly available</li>
+                <li>Benchmark standard</li>
+                <li>High-quality data</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <!-- Slide 5: Dual Approach -->
+        <section>
+          <h2>🔬 Why Two Models?</h2>
+          <div style="display: flex; justify-content: space-around">
+            <div class="card slide-left" style="width: 43%">
+              <h3 style="color: #f093fb">📊 Baseline</h3>
+              <p><strong>TF-IDF + LogReg</strong></p>
+              <ul style="font-size: 0.8em; text-align: left">
+                <li>Traditional ML</li>
+                <li>15K features</li>
+                <li>Fast (30 sec)</li>
+                <li>Interpretable</li>
+              </ul>
+            </div>
+            <div class="card slide-right" style="width: 43%">
+              <h3 style="color: #f093fb">🧠 Advanced</h3>
+              <p><strong>Legal-BERT</strong></p>
+              <ul style="font-size: 0.8em; text-align: left">
+                <li>Deep Learning</li>
+                <li>110M params</li>
+                <li>18 min (GPU)</li>
+                <li>Contextual</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <!-- Slide 6: Results -->
+        <section
+          data-background-gradient="linear-gradient(45deg, #667eea, #764ba2)"
+        >
+          <h2>🏆 Results</h2>
+          <table class="comparison-table" style="width: 85%">
+            <tr>
+              <th>Metric</th>
+              <th>Baseline</th>
+              <th>Legal-BERT</th>
+              <th>Improvement</th>
+            </tr>
+            <tr>
+              <td><strong>Accuracy</strong></td>
+              <td>74.3%</td>
+              <td style="color: #f093fb"><strong>78.9%</strong></td>
+              <td>+4.6%</td>
+            </tr>
+            <tr>
+              <td><strong>Macro F1</strong></td>
+              <td>67.8%</td>
+              <td style="color: #f093fb"><strong>72.3%</strong></td>
+              <td>+4.5%</td>
+            </tr>
+            <tr>
+              <td><strong>Training Time</strong></td>
+              <td>30 sec</td>
+              <td>18 min</td>
+              <td>36x slower</td>
+            </tr>
+            <tr>
+              <td><strong>Inference</strong></td>
+              <td>1 ms/doc</td>
+              <td>52 ms/doc</td>
+              <td>52x slower</td>
+            </tr>
+          </table>
+          <div class="insights-grid" style="margin-top: 15px">
+            <div class="result-card fragment">
+              <p style="font-size: 0.8em">
+                <strong>5% better F1</strong> = ~70 more correct classifications
+                per 1,400 docs
+              </p>
+            </div>
+            <div class="result-card fragment">
+              <p style="font-size: 0.8em">
+                <strong>Trade-off:</strong> Better accuracy vs 52x slower speed
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <!-- Slide 7: Challenges -->
+        <section>
+          <h2>🚧 Challenges We Faced</h2>
+          <div class="insights-grid">
+            <div class="card">
+              <h3 style="color: #f093fb">Technical Challenges</h3>
+              <ul style="font-size: 0.75em; text-align: left">
+                <li>Long docs (10K+ words) → Truncate to 512 tokens</li>
+                <li>Class imbalance → Balanced weights</li>
+                <li>GPU memory limits → Batch size = 8</li>
+                <li>Missing val classes → Specify all labels</li>
+                <li>Model size (440MB) → Deployment challenges</li>
+              </ul>
+            </div>
+            <div class="card">
+              <h3 style="color: #f093fb">Team Challenges</h3>
+              <ul style="font-size: 0.75em; text-align: left">
+                <li>Learning transformers from scratch</li>
+                <li>Understanding legal terminology</li>
+                <li>Coordinating remote work</li>
+                <li>Debugging GPU errors in Colab</li>
+                <li>Balancing project with coursework</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <!-- Slide 8: Applications -->
+        <section>
+          <h2>💼 Real-World Impact</h2>
+          <div style="text-align: left; margin: 0 30px; font-size: 0.75em">
+            <div
+              class="stat-box fragment"
+              style="display: block; margin: 10px 0"
+            >
+              <p>
+                <span class="emoji">🏢</span> <strong>Law Firms:</strong> Save
+                83+ hrs/month on case routing
+              </p>
+            </div>
+            <div
+              class="stat-box fragment"
+              style="display: block; margin: 10px 0"
+            >
+              <p>
+                <span class="emoji">🔍</span>
+                <strong>Legal Research:</strong> Quick precedent categorization
+              </p>
+            </div>
+            <div
+              class="stat-box fragment"
+              style="display: block; margin: 10px 0"
+            >
+              <p>
+                <span class="emoji">⚖️</span> <strong>Courts:</strong> Automated
+                docket management
+              </p>
+            </div>
+            <div
+              class="stat-box fragment"
+              style="display: block; margin: 10px 0"
+            >
+              <p>
+                <span class="emoji">💰</span>
+                <strong>Cost Savings:</strong> $50K+ annually for mid-size firms
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <!-- Slide 9: Conclusion -->
+        <section
+          data-background-gradient="linear-gradient(135deg, #667eea 0%, #764ba2 100%)"
+        >
+          <h2>🎓 Key Takeaways</h2>
+          <div style="text-align: left; margin: 20px 40px; font-size: 0.8em">
+            <p class="fragment">
+              ✅ Built end-to-end legal document classifier
+            </p>
+            <p class="fragment">✅ Compared traditional ML vs Deep Learning</p>
+            <p class="fragment">
+              ✅ Achieved <span class="highlight">78.9% accuracy</span> on
+              SCOTUS
+            </p>
+            <p class="fragment">
+              ✅ Domain pre-training boosts performance by
+              <span class="highlight">~5%</span>
+            </p>
+            <p class="fragment">✅ Deployed interactive Streamlit web app</p>
+          </div>
+          <br />
+          <div
+            class="gradient-bg fragment"
+            style="background: rgba(255, 255, 255, 0.2); padding: 20px"
+          >
+            <h3>Process 1000+ documents/hour with AI</h3>
+          </div>
+        </section>
+
+        <!-- Slide 10: Thank You -->
+        <section
+          data-background-gradient="linear-gradient(135deg, #667eea 0%, #764ba2 100%)"
+        >
+          <h1 class="zoom-in">Thank You! 🙏</h1>
+          <br />
+          <div style="font-size: 0.9em" class="animate-in">
+            <h3>Team Members:</h3>
+            <div class="team-member">
+              Kirtan Shah<br /><small>22000428</small>
+            </div>
+            <div class="team-member">
+              Naisargi Modi<br /><small>22000397</small>
+            </div>
+            <div class="team-member">
+              Mansha Sanger<br /><small>22000396</small>
+            </div>
+            <div class="team-member">
+              Archi Prajapati<br /><small>22000378</small>
+            </div>
+          </div>
+          <br /><br />
+          <h2>Questions? 🤔</h2>
+        </section>
+      </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/reveal.min.js"></script>
+    <script>
+      Reveal.initialize({
+        hash: true,
+        transition: "slide",
+        transitionSpeed: "default",
+        slideNumber: true,
+        progress: true,
+        controls: true,
+        keyboard: true,
+        overview: true,
+        center: true,
+        touch: true,
+        width: "100%",
+        height: "100%",
+        margin: 0.04,
+        minScale: 0.2,
+        maxScale: 2.0,
+        fragments: true,
+        fragmentInURL: true,
+        embedded: false,
+        help: true,
+        showNotes: false,
+        autoSlide: 0,
+        mouseWheel: false,
+        hideInactiveCursor: true,
+        hideCursorTime: 5000,
+        previewLinks: false,
+      });
+    </script>
+  </body>
+</html>
