@@ -28,7 +28,6 @@ Automatically categorize legal documents into 14 predefined legal issue areas us
 
 ## 🎥 Project Demo Video
 
-[![Watch Demo](https://img.shields.io/badge/▶-Watch%20Demo%20Video-red?style=for-the-badge&logo=youtube)]
 
 **[Click here to watch our complete project walkthrough on Loom →](https://www.loom.com/share/52ac39a201c34220a3be12becd7b2ef2))**
 
