@@ -21,7 +21,7 @@ Automatically categorize legal documents into 14 predefined legal issue areas us
 | **Archi Prajapati** | 22000378 | Documentation, Testing & Research |
 
 **Course:** Deep Learning  
-**Institution:** [Your University Name]  
+**Institution:** Navrachana University  
 **Submission Date:** December 2024
 
 ---
